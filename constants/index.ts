@@ -55,3 +55,22 @@ export const tabs = [
 		},
 	},
 ]
+
+export const templates = [
+	{
+		name: 'Scrum',
+		image: '/scrum.svg'
+	},
+	{
+		name: 'Kanban',
+		image: '/kanban.svg'
+	},
+	{
+		name: 'Bug tracking',
+		image: '/bug.svg'
+	},
+	{
+		name: 'DevOps',
+		image: '/devops.svg'
+	},
+]
