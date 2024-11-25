@@ -1,3 +1,6 @@
 <template>
-  <div>Hello auth</div>
+  <LayoutsMainNavbar />
+  <section>
+    <slot/>
+  </section>
 </template>
