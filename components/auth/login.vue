@@ -1,4 +1,11 @@
 <template>
+  <UAlert
+    v-if="error"
+    :description="error"
+    title="Error"
+    color="red"
+    variant="outline"
+  />
   <UForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
     <UFormGroup label="Email" name="email">
       <UInput v-model="state.email" color="blue" size="lg" />
@@ -15,14 +22,20 @@
       </span>
     </div>
 
-    <UButton type="submit" color="blue" class="w-full" block size="lg">
-      Submit
+    <UButton type="submit" color="blue" class="w-full" block size="lg" :disabled="isLoading">
+      <template v-if="isLoading">
+        <Icon name="svg-spinners:3-dots-fade" class="w-5 h-5"/>
+      </template>
+      <template v-else>
+        Next
+      </template>
     </UButton>
   </UForm>
 </template>
 
 <script setup lang="ts">
 import type { FormError, FormSubmitEvent } from '#ui/types'
+import { ACCOUNT } from '~/libs/appwrite';
 
 defineProps({
   toggleLogin: {
@@ -30,6 +43,13 @@ defineProps({
     required: true
   }
 })
+
+const toast = useToast()
+const authStore = useAuthStore()
+const router = useRouter()
+
+const isLoading = ref(false)
+const error = ref('')
 
 const state = reactive({
   email: undefined,
@@ -44,7 +64,27 @@ const validate = (state: any): FormError[] => {
 }
 
 async function onSubmit(event: FormSubmitEvent<any>) {
-  // Do something with data
+  isLoading.value = true
   console.log(event.data)
+  const {email, password} = event.data
+  try{
+    await ACCOUNT.createEmailPasswordSession(email, password)
+    const response = await ACCOUNT.get()
+    authStore.set({
+      email: response.email,
+      name: response.name,
+      id: response.$id,
+      status: response.status
+    })
+    isLoading.value = false
+    toast.add({
+      title: 'Logged in',
+      description: 'You are now logged in'
+    })
+    await router.push('/')
+  }catch(err: any){
+    error.value = err.message
+    isLoading.value = false
+  }
 }
 </script>

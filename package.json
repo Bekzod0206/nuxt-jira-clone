@@ -12,9 +12,11 @@
   "dependencies": {
     "@nuxt/image": "^1.8.1",
     "@nuxt/ui": "^2.19.2",
+    "@pinia/nuxt": "^0.8.0",
     "appwrite": "^16.0.2",
     "nuxt": "^3.14.1592",
-    "vue": "latest",
-    "vue-router": "latest"
+    "pinia": "^2.2.8",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   }
 }

@@ -1,5 +1,6 @@
 <template>
-  <div class="flex items-center justify-center h-screen w-full relative">
+  <UiLoader v-if="loadingStore.isLoading" />
+  <div class="flex items-center justify-center h-screen w-full relative" v-else>
     <NuxtImg src="/bg-auth.jpg" class="absolute inset-0 w-full h-full object-cover z-10"/>
     <div class="absolute inset-0 w-full h-full object-cover z-20 bg-white/40 dark:bg-black/40"></div>
     <UCard class="z-50 w-1/2 relative" :ui="{body: { base: 'flex gap-4' } }">
@@ -35,7 +36,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { ACCOUNT } from '~/libs/appwrite';
+
   definePageMeta({layout: 'auth'})
+  useHead({title: 'Auth | Jira software'})
+
+  const router = useRouter()
+  const loadingStore = useLoadingStore()
+  
+  onMounted(() => {
+    ACCOUNT.get().then(() => router.push('/')).catch(() => loadingStore.set(false))
+  })
 
   const isLogin = ref(true)
   const toggleLogin = () => (isLogin.value = !isLogin.value)

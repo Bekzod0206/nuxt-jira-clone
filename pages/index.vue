@@ -2,8 +2,8 @@
   <main class="pb-72">
 
     <!-- HERO SECTION -->
-    <section class="flex items-center justify-between h-[100vh] pt-[10vh] gap-4 
-      bg-gradient-to-t from-white dark:from-black to-blue-500 dark:to-blue-800"
+    <section
+      class="flex items-center justify-between h-[100vh] pt-[10vh] gap-4 bg-gradient-to-t from-white dark:from-black to-blue-500 dark:to-blue-800"
     >
       <div class="pl-20 flex flex-col space-y-3">
         <h1 class="text-5xl">
@@ -13,11 +13,20 @@
           The #1 software development tool used by agile teams
         </p>
   
-        <NuxtLink to="/auth">
-          <UButton color="blue">
-            Try it free!
-          </UButton>
-        </NuxtLink>
+        <template v-if="currentUser.status">
+          <NuxtLink to="/documents" class="min-w-[50px]">
+            <UButton color="blue">
+              Documents
+            </UButton>
+          </NuxtLink>
+        </template>
+        <template v-else>
+          <NuxtLink to="/auth">
+            <UButton color="blue">
+              Try it free!
+            </UButton>
+          </NuxtLink>
+        </template>
       </div>
   
       <NuxtImg src="/hero.webp" class="w-[60%]" />
@@ -35,8 +44,8 @@
             <div class="w-[40%]">
               <h1 class="text-4xl font-bold">{{ item.label }}</h1>
               <p class="mt-6 text-xl">{{ item.description }}</p>
-              <div class="py-4 mt-12 rounded-r-full flex flex-col space-y-2
-                bg-gradient-to-r from-white dark:from-black to-blue-500 dark:to-blue-800"
+              <div
+                class="py-4 mt-12 rounded-r-full flex flex-col space-y-2 bg-gradient-to-r from-white dark:from-black to-blue-500 dark:to-blue-800"
               >
                 <Icon name="ri:double-quotes-l" class="text-7xl" />
                 <p class="text-lg pl-2">{{ item.credentials.text }}</p>
@@ -59,7 +68,7 @@
         <div class="w-16 h-16 bg-blue-500 dark:bg-blue-800 rounded-full flex items-center justify-center">
           <Icon name="material-symbols:file-copy" class="text-white text-4xl" />
         </div>
-        <div class="flex-1 h-2 bg-gradient-to-r from-blue-500 dark:from-blue-800 to-gray-500 dark:to-gray-800""></div>
+        <div class="flex-1 h-2 bg-gradient-to-r from-blue-500 dark:from-blue-800 to-gray-500 dark:to-gray-800"></div>
         <div class="w-16 h-16 bg-gray-500 dark:bg-gray-800 rounded-full flex items-center justify-center">
           <Icon name="material-symbols:linked-services" class="text-white text-4xl" />
         </div>
@@ -124,4 +133,6 @@
 import { tabs, templates } from '~/constants';
 
 useHead({title: 'Jira software'})
+
+const { currentUser } = useAuthStore()
 </script>

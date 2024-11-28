@@ -1,4 +1,11 @@
 <template>
+   <UAlert
+      v-if="error"
+      :description="error"
+      title="Error"
+      color="red"
+      variant="outline"
+    />
   <UForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
     <UFormGroup label="Name" name="name">
       <UInput v-model="state.name" color="blue" size="lg" />
@@ -14,13 +21,18 @@
 
     <div class="text-sm text-neutral-500">
       Already have an account?
-      <span class="text-blue-500 hover:underline" role="button" @click="$props.toggleLogin">
+      <span class="text-blue-500 hover:underline" role="button" @click="$props.toggleLogin()">
         Sign in
       </span>
     </div>
 
-    <UButton type="submit" color="blue" class="w-full" block size="lg">
-      Submit
+    <UButton type="submit" color="blue" class="w-full" block size="lg" :disabled="isLoading">
+      <template v-if="isLoading">
+        <Icon name="svg-spinners:3-dots-fade" class="w-5 h-5"/>
+      </template>
+      <template v-else>
+        Next
+      </template>
     </UButton>
   </UForm>
 </template>
@@ -29,12 +41,17 @@
 import type { FormError, FormSubmitEvent } from '#ui/types'
 import { ACCOUNT, UNIQUE_ID } from '~/libs/appwrite';
 
-defineProps({
+const props = defineProps({
   toggleLogin: {
-    type: Function as PropType<(event: MouseEvent) => void>,
+    type: Function,
     required: true
   }
 })
+
+const toast = useToast()
+
+const isLoading = ref(false)
+const error = ref('')
 
 const state = reactive({
   name: undefined,
@@ -51,12 +68,20 @@ const validate = (state: any): FormError[] => {
 }
 
 async function onSubmit(event: FormSubmitEvent<any>) {
-  // Do something with data
+  isLoading.value = true
   console.log(event.data)
   const {email, password, name} = event.data
   try{
-    const response = await ACCOUNT.create(UNIQUE_ID, email, password, name)
-    console.log(response)
-  }catch(err){}
+    await ACCOUNT.create(UNIQUE_ID, email, password, name)
+    props.toggleLogin()
+    toast.add({
+      title: 'Account created',
+      description: 'You can now login with your new account'
+    })
+    isLoading.value = false
+  }catch(err: any){
+    error.value = err.message
+    isLoading.value = false
+  }
 }
 </script>
