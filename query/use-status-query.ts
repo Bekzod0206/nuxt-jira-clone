@@ -15,7 +15,7 @@ export const useStatusQuery = () => {
         Query.equal('userId', currentUser.id)
       ]),
     select: data => {
-      console.log(data);
+      // console.log(data);
       
       const newBoard: IColumn[] = status.map(item => ({
         ...item,
