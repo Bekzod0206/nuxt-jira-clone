@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 import type { FormError, FormSubmitEvent } from '#ui/types'
+import { ID } from 'appwrite';
 import { ACCOUNT, UNIQUE_ID } from '~/libs/appwrite';
 
 const props = defineProps({
@@ -72,7 +73,8 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   console.log(event.data)
   const {email, password, name} = event.data
   try{
-    await ACCOUNT.create(UNIQUE_ID, email, password, name)
+    // await ACCOUNT.create(UNIQUE_ID, email, password, name)
+    await ACCOUNT.create(ID.unique(), email, password, name)
     props.toggleLogin()
     toast.add({
       title: 'Account created',

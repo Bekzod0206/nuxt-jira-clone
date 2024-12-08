@@ -41,6 +41,7 @@
 
 import type { FormError, FormSubmitEvent } from '#ui/types'
 import { useMutation } from '@tanstack/vue-query';
+import { ID } from 'appwrite';
 import { COLLECTION_DEALS, DB_ID } from '~/constants';
 import { DATABASE, UNIQUE_ID } from '~/libs/appwrite';
 import type { ICreateDeals } from '~/types';
@@ -73,7 +74,7 @@ const validate = (state: any): FormError[] => {
 }
 const { isPending, mutate } = useMutation({
   mutationKey: ['create-deal'],
-  mutationFn: (data: ICreateDeals) => DATABASE.createDocument(DB_ID, COLLECTION_DEALS, UNIQUE_ID, data),
+  mutationFn: (data: ICreateDeals) => DATABASE.createDocument(DB_ID, COLLECTION_DEALS, ID.unique(), data),
   onSuccess: () => {
     props.refetch()
     state.name = undefined
