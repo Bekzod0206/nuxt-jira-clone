@@ -17,6 +17,7 @@
               Documents
             </UButton>
           </NuxtLink>
+          <SharedUserBox />
         </template>
         <template v-else>
           <NuxtLink to="/auth">

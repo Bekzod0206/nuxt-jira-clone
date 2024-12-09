@@ -61,7 +61,7 @@
 import { useMutation } from '@tanstack/vue-query';
 import { COLLECTION_DEALS, DB_ID, status } from '~/constants';
 import { ACCOUNT, DATABASE } from '~/libs/appwrite';
-import { useStatusQuery } from '~/query/use-status-query';
+import { useStatus } from '~/query/use-status';
 import type { IColumn, IDeal } from '~/types';
 
 definePageMeta({layout: 'documents'})
@@ -84,7 +84,7 @@ onMounted(() => {
     })
     .catch(() => router.push('/auth'))
 })
-const {data, isLoading, refetch} = useStatusQuery()
+const {data, isLoading, refetch} = useStatus()
 
 const dragCardRef = ref<IDeal | null>(null)
 const sourceColumnRef = ref<IColumn | null>(null)
